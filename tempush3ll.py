@@ -22,10 +22,11 @@ def banner():
     print(col.CYAN + banner + col.RESET+ "\n")
 
 
-def help():    
+def help():
+    banner()    
     print("Usage: ./tempush3ll.py 10.10.10.10")
     print("Or:    ./tempush3ll.py 10.10.10.10 9.9.9.9:7777 - for a reverse shell\n")
-   
+    commands()
 
 def commands():
     print(col.GREEN+ "Commands:" + col.RESET)
@@ -63,8 +64,6 @@ def printResults(text):
 
 banner()
 help()
-commands()
-
 
 #Shell
 while True:
