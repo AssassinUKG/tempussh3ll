@@ -34,13 +34,14 @@ def commands():
     print("ts-clear : Clear Screen")
     print("ts-shell : Call Reverse Shell\n")
 
-if len(sys.argv) < 1:
+if len(sys.argv) < 2:
     help()
     sys.exit(0)
-
-if len(sys.argv) == 3:
+elif len(sys.argv) == 3:
     global ip_port 
     ip_port = sys.argv[2]
+
+
 
 def sendCmd(cmd):
     s = requests.Session()
