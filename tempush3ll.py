@@ -98,7 +98,7 @@ while True:
         printResults(r.text)
 
     except requests.Timeout as t:
-        print(f"Error: Connection Timed out, Check you values!!\n\n{t}")
+        print(f"Error: Connection Timed out, Check your values!!\n\n{t}")
     except Exception as e:
         print(col.RED+ f"Error in output: {e}" + col.RESET)
         
