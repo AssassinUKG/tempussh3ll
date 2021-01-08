@@ -60,8 +60,6 @@ def printResults(text):
     else:
         print(col.RED+ "Error in output, try again" + col.RESET)
 
-
-banner()
 help()
 
 #Shell
